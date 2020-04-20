@@ -24,8 +24,12 @@ Run in a main program
 int main() {
 
     bool stopGame = false;
+    int moveCounter = 0;
+    //build a board and have it populated in a 2D array
+    const int row = 3;
+    const int column = 3;
 
-    while (stopGame == false) {
+    while (stopGame == false && moveCounter <= row*column) {
 
         bool correctChoice = false;
         char playerInput = '\0';
@@ -53,10 +57,6 @@ int main() {
         }
 
         cout << "This is the empty board." << endl;
-
-        //build a board and have it populated in a 2D array
-        const int row = 3;
-        const int column = 3;
 
         // std::vector<char> board(row, column) = { {0,0,0},{},{} };
 
@@ -97,19 +97,25 @@ int main() {
                 cout << "Y cord: ";
                 cin >> yCord;
 
-                if (xCord > 3 || xCord < 1 || yCord > 3 || yCord < 1) {
+                xCord -= 1;
+                yCord -= 1;
+
+                if (xCord > 2 || xCord < 0 || yCord > 2 || yCord < 0) {
 
                     cout << "Invalid entry, please try again." << endl;
+                }
+                else if (board[xCord][yCord] != blank) {
 
+                    cout << "Position already occupied, please enter a different position." << endl;
                 }
                 else {
                     correctPiece = true;
+                    moveCounter++;
                 }
             }
 
-            xCord -= 1;
-            yCord -= 1;
-
+            
+            //presenting the board
             board[xCord][yCord] = playerInput;
             for (int i = 0; i < row; i++) {
 
@@ -124,18 +130,86 @@ int main() {
                 cout << endl;
             }
 
+            //check to see a winning board state
+            int playerCount = 0;
 
+            //by row ---
+            board[xCord][yCord] = playerInput;
+           
+            
+            for (int i = 0; i < row; i++) {
 
+                for (int j = 0; j < column; j++) {
 
+                     if (board[i][j] == playerInput) {
+                         playerCount++;
+                     }   
+                }
+                if (playerCount == row) {
+                    cout << "You win by row!" << endl;
+                    correctChoice = true;
+                    stopGame = true;
+                }
+                playerCount = 0;
+
+            }
+            
+            //by column |
+            for (int i = 0; i < row; i++) {
+
+                for (int j = 0; j < column; j++) {
+
+                    if (board[j][i] == playerInput) {
+                        playerCount++;
+                    }
+                }
+                if (playerCount == column) {
+                    cout << "You win by column!" << endl;
+                    correctChoice = true;
+                    stopGame = true;
+                }
+                playerCount = 0;
+
+            }
+
+            //by diagonal \
+
+            for (int i = 0; i < row; i++) {
+
+                    if (board[i][i] == playerInput) {
+                        playerCount++;
+
+                        if (playerCount == row) {
+                            cout << "You win by diagonal!" << endl;
+                            correctChoice = true;
+                            stopGame = true;
+                        }
+                    }
+
+            }
+            playerCount = 0;
+            
+            //by anti-diagonal   /
+
+            for (int i = 0, j = (column-1); i < row && j>=(column-column); i++, j--) {
+
+                if (board[i][j] == playerInput) {
+                    playerCount++;
+
+                    if (playerCount == row) {
+                        cout << "You win by anti-diagonal!" << endl;
+                        correctChoice = true;
+                        stopGame = true;
+                    }
+                }
+            }
+            playerCount = 0;
 
         }
 
 
     }
    
-   
-
-
     return 0;
 }
 
