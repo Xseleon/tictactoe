@@ -131,11 +131,12 @@ int main() {
             }
 
             //check to see a winning board state
+            int playerCount = 0;
 
             //by row ---
             board[xCord][yCord] = playerInput;
            
-            int playerCount = 0;
+            
             for (int i = 0; i < row; i++) {
 
                 for (int j = 0; j < column; j++) {
@@ -171,21 +172,44 @@ int main() {
 
             }
 
+            //by diagonal \
 
-            //by diagonal /
+            for (int i = 0; i < row; i++) {
 
-            //by anti-diagonal   \
+                    if (board[i][i] == playerInput) {
+                        playerCount++;
 
+                        if (playerCount == row) {
+                            cout << "You win by diagonal!" << endl;
+                            correctChoice = true;
+                            stopGame = true;
+                        }
+                    }
 
+            }
+            playerCount = 0;
+            
+            //by anti-diagonal   /
+
+            for (int i = 0, j = (column-1); i < row && j>=(column-column); i++, j--) {
+
+                if (board[i][j] == playerInput) {
+                    playerCount++;
+
+                    if (playerCount == row) {
+                        cout << "You win by anti-diagonal!" << endl;
+                        correctChoice = true;
+                        stopGame = true;
+                    }
+                }
+            }
+            playerCount = 0;
 
         }
 
 
     }
    
-   
-
-
     return 0;
 }
 
